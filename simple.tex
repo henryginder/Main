@@ -1,0 +1,35 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+\begin{document}
+
+One of the main appeals of \LaTeX\ is that it is \textit{very} good at
+\textbf{typesetting} equations:
+
+\[
+a_n = \left(\frac{1}{\pi}\right)\cos(4x)
+\]
+
+$$
+a_n = \left(\frac{1}{\pi}\right)\cos(4x)
+$$
+
+\begin{equation}
+a_n = \left(\frac{1}{\pi}\right)\cos(4x)
+\label{my_equation}
+\end{equation}
+
+\begin{equation}
+a_m = \left(\frac{2}{\pi}\right)\sin(2x)
+\label{my_other_equation}
+\end{equation}
+
+The advantage of the \texttt{equation} environment is that is allows 
+you to label and reference equations like you see above in Equations 
+\ref{my_equation} and \ref{my_other_equation}.
+
+% This is a comment and will not be printed
+
+\end{document}
+

@@ -1,0 +1,300 @@
+\documentclass[modern]{aastex63}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{parskip}
+\usepackage{rotating}
+
+\received{June 7, 2020}
+\graphicspath{{Images/}}
+
+\shorttitle{Messier 82 Star Formation}
+\shortauthors{Ginder et al.}
+
+\begin{document}
+
+\title{A Star is Born
+
+Messier 82 Star Formation Rate Through $H\alpha$ Flux}
+
+\email{ginder@uw.edu}
+
+\author{Henry Ginder}
+\affil{Group: \\ David Frothingham, Brandon Bosworth}
+\affil{University of Washington, Astronomy 480, Spring 2020}
+
+\begin{abstract}
+Star formation rates are often calculated using $H\alpha$ luminosity. Converting from $L_{H\alpha}$ to solar masses per year may be trivial, but getting from the raw data to that point is not. We have many '.fits' files images of the galaxy Messier 82. We will have to go through a data reduction process, including correcting for errors with bias images, overscan regions, and flat field images. Using photometry methods we can try and determine the flux from Messier 82 through the $H\alpha$ filter, which can be turned into a luminosity. By determining the luminosity of M82 at specifically the wavelength $H\alpha$ we shall use methods from previous literature to determine the galaxy's star formation rate and get some answer in terms of solar masses born per year. This is very exciting because M82 is one of the most active galaxies in the known universe when it comes to birthing stars, even compared to the much more massive Milky Way.
+\end{abstract}
+
+\section{Introduction}
+
+Messier 82 (M82) is a neighbor galaxy in our galaxy cluster, it's type is contentious, and it's known for its starbursts and cigar shape \citep{2007ApJ...671..1550}, we are interested in the former, the bursts of stars, coming to life. The methods that will be used can be traced back to Kennicutt, who is mentioned in just about every piece of star formation rate literature using $H\alpha$ flux since 1994. We are interested in the birthing of stars within this galaxy using the $H\alpha$ emission line. 
+
+There has been much research on M82 over the last couple decades or so, and not surprisingly it often involved star forming regions and often utilized $H\alpha$ emissions. Kennicutt has done several papers on M82 and he discovered an empirical relation between $H\alpha$ luminosity of a diffuse body, like a galaxy, and star formation rate. This relation will be very useful since we have $H\alpha$ filter data. Here is said relation:
+
+\begin{equation}\label{'Equation 7'}
+SFR(M_{\odot} * yr^{-1}) = 7.9 * 10^{-42} \frac{L(H\alpha)}{ergs s^-{1}}, 
+\end{equation}
+
+Our goal is to use the data given to us and measure the galaxy's star formation rate. We are supplied with 27 fits files that contain our data, flat fields, biases and overscan regions. Most importantly we have 11 object fits files, they are all either in the r band filter or $H\alpha$ filter. We were given 5 bias frames to help remove unwanted noise. There are also flat field files for both filters, six for $H\alpha$ and five for r, which will also help reduce background noise. There are also some superfluous flat fields for filters we don't have. We will have to carefully reduce our data to something useful later on to correct for inaccuracies. After going through the data reduction, we will have to account for the background sky which is essentially glowing up the whole image. Then we will have some usable images of M82 capable of being used to determine the count from M82 in specifically the $H\alpha$ regime. Once we get the count we can convert it to an energy over an area and use the telescope's own intrinsic properties, along with a well known flux-luminosity relation, to get a luminosity of M82 through the $H\alpha$ filter. There is an intimate connection between $H\alpha$ emissions and UV ionizing young, massive stars, and the star formation rate of the region. We can use the method provided by Kennicutt to get a star formation rate, provided a $H\alpha$ luminosity.
+
+Here is the equation for Luminosity (Power) of a radiant body like a star or even a galaxy:
+
+\begin{equation}\label{'Equation 1'}
+L_* = 4 \pi\ r^2 \sigma\ T^4
+\end{equation}  where r = radius, $\sigma$ = stefan-boltzman constant, T = temperature in Kelvin \citep{2001JRASC..95...32L}
+
+You can see that a star's luminosity is squarely proportional to it's radius, and that luminosity goes as temperature to the forth power. These O and B stars are simply so much greater in these two stellar classification regimes. For a star to be able to ionize a hydrogen atom, the star must be at least 10 times the mass of the sun which corresponds to a luminosity that is already 100 times that of the sun. The larger a star is, the more massive it is, meaning more energy, so the temperature (as well as peak wavelength) increase. Due to luminosity's $T^4$ relation, this will also lead to the luminosity going far beyond 100 times that of the sun. The time it would take to notice such a difference in stellar properties over time is orders of magnitude larger than the lifespan of a human. Still, as a star increases in size many different mechanisms are working at once, leading to a greater temperature, peak wavelength, and (more obviously) surface area. This means that when a star gets larger, the star as a whole has more mass and energy inside, the individual photons are emitted at a higher frequency which is synonymous with higher energy, and there are far more of these photons being emitted per unit time since the radius is increasing and the area of a sphere goes as $r^2$. Luminosity is a power, meaning that it has the unit Watt, which is a Joule per second, where Joule is a unit energy. Here we see the relation between the Luminosity (power) and the flux we measure, followed by the relation between luminosity and the time it takes for the star to die:
+
+\begin{equation}\label{'Equation 2'}
+L_* = flux * 4 \pi d^2
+\end{equation} where flux = radiant energy flux from object, d = distance to object
+
+\begin{equation}\label{'Equation 3'}
+t = \frac{U}{L_*}
+\end{equation} where U = potential energy stored, t = star lifespan \citep{2000A&A...364..217D}
+
+It's evident from Equation 3 that a star with a huge luminosity will run out of their fuel much faster than a star with less fuel and a smaller luminosity. Large O and B stars will run out fuel within a few million years, while our nearest neighbor star, proxima centauri, who has a mass of 0.123 $M_{\odot}$ and luminosity of .0017 $M_{\odot}$ has a lifetime of ~8.6 trillion years, longer than the age of the universe \citep{2018ApJ...864...75K}, because it hardly uses any of it's fuel compared to the O and B stars, or even our ordinary sun. These type O and type B stars are fast-living and ridiculously luminous harbingers for star forming regions.
+\bigskip
+
+\section{Observations}
+Our data comes from the Apache Point Observatory, on the ARCTIC telescope, which is a 3.5 m, visible-wavelength CCD camera, whose coordinates are 32.7802° N, 105.8197° W. These data were taken on May 2, 2018 at approximately 4:40 AM. Since I was not the one who actually took this data I am not sure what the weather was like on that day. There are a variety of exposure times taken, in both the r filter and $H\alpha$ filter. The conditions at Apache Point Observatory were pretty good, according to the header the humidity factor was 0.16 Also all three rows who denote temperature issues with the CCDs (CCDHEAD, CCDTEMP, CCDHEAT) all show a value of 'NaN' signifying that our machinery did not have temperature issues at the time of observation.
+
+Table 1 shows all of our fits files that are usable to us. Whether it's a bias, flat, or science image (object), they can be used only if we have the other necessary files with the same filter, especially the flats. Table 1 confirms that we are able to work with our $H\alpha$ data and our r data since there are flats for both filters.
+
+\begin{table}
+\caption{Fits Files}
+\begin{tabular}{llrrl}
+\toprule
+
+Science Images &Biases &Flats \\
+\midrule
+ arctic m82.0001.fits &   arctic bias.0001.fits &  arctic halpha flat.0004.fits\\
+ arctic m82.0002.fits &   arctic bias.0002.fits &  arctic halpha flat.0005.fits\\
+ arctic m82.0003.fits &   arctic bias.0003.fits &  arctic halpha flat.0006.fits\\
+ arctic m82.0004.fits &   arctic bias.0004.fits &  arctic r flat.0003.fits \\
+ arctic m82.0005.fits &                         &  arctic r flat.0004.fits\\
+ arctic m82.0006.fits &                         &  arctic r flat.0005.fits\\
+ arctic m82.0007.fits &       &     \\
+ arctic m82.0008.fits &  &   &     \\
+ arctic m82.0009.fits &    &   &     \\
+ arctic m82.00010.fits &   &   &   \\
+ arctic m82.00011.fits &      &   &  \\
+
+ \bottomrule
+\end{tabular}
+\end{table}
+
+Table 2 shows the quality of our observing conditions, as far as airmass goes, for our object images. Airmass is all the air in your way when looking through the atmosphere, meaning if you are observing an object near your horizon then the angle between the object and your ground frame is smaller, so you are looking through more of the junk in our atmosphere than if you were looking straight up at your zenith. Airmass goes as $\sec(z)$, where z is the zenith angle. You can see that the air mass that night was ~1.3 or so, which are good conditions. \citep{1989ApOpt..28.4735K}
+
+\begin{table}
+\caption{Air mass}
+\begin{tabular}{llrrl}
+\toprule
+
+m82.1.fits &    m82.2.fits &     m82.3.fits & m82.4.fits & m82.5.fits & m82.6.fits & m82.7.fits & m82.8.fits & m82.9.fits & m82.10.fits & m82.11.fits\\
+\midrule
+
+1.33559 & 1.30990 & 1.31108 & 1.31713 & 1.32358 & 1.32540 & 1.33005 & 1.33560 & 1.34173 & 1.35049 & 1.35911\\
+
+ \bottomrule
+\end{tabular}
+\end{table}
+
+We used these files to try and get over what is likely our biggest barrier in this project, measuring those O and B stars. Luckily for us we have the perfect data to do that. We have several fits files that contain values for fluxes from M82 specifically at the wavelength 656.28 nm, also known as the $H\alpha$ emission. $H\alpha$ emission happens in a hydrogen atom when an electron (in the Balmer Series) makes a jump from energy level 3 to energy level 2. Through conservation of energy, this decrease in energy caused by the step down by the electron forces the atom to emit electromagnetic radiation (a photon) with the exact energy lost from the step down, this energy corresponds to that discrete, quantized 656.28 nm wavelength photon. O and B type stars are the only stars that are energetic enough to the point that they can excite the hydrogen atom enough to produce $H\alpha$ emissions. This connection essentially means there is a direct correlation between $H\alpha$ intensity and the ionizing photons from O and B stars in a given region, which itself is proportional to the birth rate of O and B stars! 
+
+A star forming region is a dusty region of space that contains molecular clouds \citep{1991IAUS..146..373D}. These clouds will sometimes collapse and form stars. These regions of space that house dust and gas are full of molecular $H_{2}$. Some of this molecular $H_{2}$ then collapses into stars. If a star is big and bright enough, say ~20 times the mass of the sun, and has a strong UV flux, then it can excite the hydrogen atom's around it, ionizing the gas and turning the region to a HII region \citep{2009ApJS..181..255A}. The difference between a $H_{2}$ region and a HII region is that $H_{2}$ regions are molecular $H_{2}$ while HII regions are full of ionized hydrogen. Several million years later, that HII region's same stars die, signifying the region will now become a HI region, because when all those O and B stars exploded in supernovae, they will destroy any ionized $H_{2}$ molecules' bonds nearby, turning them into atomic $H_{1}$. The baryonic hydrogen in the region will then start to recombine with other hydrogen molecules as it slowly makes it's way back towards a $H_{2}$ region. What is really important here is the contrast of the time scales, meaning that it takes the O and B stars just a few million years to die out compared to the few billion years it takes for the gas cloud to be consumed, and the lifetime of the other younger stars which can be as long as trillions of years. So, we can take the existence of O and B stars to represent stars that have just now formed, in this context.
+
+\bigskip
+\section{Reduction Procedures}
+
+There are plenty of calibration techniques, corrections, and adjustments that need to be made to our data. I will be using Python 3.7 for this, along with many other downloaded packages. Numpy is used for just about anything in Python using large arrays, especially multi-dimensional arrays like the ones we are using. Our files' data are exactly that: arrays within arrays detailing the counts over the charged coupled devices (CCDs) over their respective exposure times. Numpy also has many high-level functions that can be run on said arrays. Astropy is another very useful package, especiallly the CCDData command which converts the fits files to multi-dimensional arrays, like mentioned before, which also allows us to use numpy with them. The next package, ccdproc, is the most important package as far as corrections go, since you need it to correct for biases, flats, and overscans. For photometry and sky subtraction we need a package that can make many different regions on the sky in which to perform different photometry counts, aptly called photutils. To plot in python it is common to use the matplotlib library. SAOImage DS9 was also used for some imaging but only for inspection of the images and for scaling some images. In total we have 27 fits files, some of which we do not need since they are flat fields for filters we do not possess.
+
+\subsection{Bias Reduction}
+We have five bias frames. Biases are used to rid of unwanted data from the sensor, specifically what is going on internally, electronically. Biases are 0 second exposures. The only problem with biases is that no one bias is completely accurate for how the sensor behaves in total over time. What does pop up on the detector for that infinitesimal period of time is not an exact representation of what the final bias should look like. Since it is virtually random what noise will appear during the 0 second exposure, we need a method to combine the biases for some sort of 'master bias'. Since these are fits files which are just matrices (arrays of arrays), we can operate on them as if they we numbers. Clearly we can average out our 5 biases by, computing the average by adding up all the arrays, respectively, and dividing by n = 5. To make matters easier there is a package within ccdproc called 'combine' that will combine biases for you, all you have to tell it is that "method = 'average'". This results in our master bias. To account for the master bias you can use the package 'subtract bias' to subtract the master bias from the object images. Whenever biases are mentioned from here on, it's assumed to be the master bias. Figure 1 shows a bias before combination as well as the master bias after combination. The difference may be hard to see but it's there.
+
+
+\begin{figure}[htb!]
+\plottwo{./images/biass.png}{./images/master.png}
+\caption{One bias frame on left, master bias on the right \label{fig:f2}\label{fig:f4}}
+\end{figure}
+
+\subsection{Overscan Trimming}
+Next are the overscan regions of our files. Unlike the objects, biases, and flat fields, the overscans are not their own file, per say, rather they are found in all those files stated. They need to be accounted for and understood in all the different files. An overscan is the area around the edges of a fits file that is essentially a dark region. Overscans are very useful because they are taken at the same time as the object images, so they will always represent the electronic noise accurately, regardless of exposure time. To account for them we simply need to remove it from our image, but determining exactly where to cut can be hard, luckily within the header of our fits files there's a row that tells you precisely where the 'data' is, meaning everything outside that is overscan and can be deleted. This is the row 'DSEC11  = '[3:2050,1:2048]'. Like before, ccdproc has a very helpful package, this time it's 'trim image' which takes ranges of values in both x and y and clips everything outside of that region. After getting said region from the header of our data we can use 'trim image' to create a new trimmed version of our fits files. All of our file types will be trimmed. On figure 1 you can see the overscan regions on the bottom of the image and on the right of the image, they look like dark scan regions. Figure 2 is an uncorrected r filter image of M82 and you can very easily see the overscan regions on the image, especially on the right side where the overscan region is larger. Overscan regions can also be seen on any images precalibration, like both biases in Figure 1. \\
+\\
+\\
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/overscan.png}
+\caption{\label{fig:frog}Uncorrected Science Image with Overscan Untrimmed .}
+\end{figure}
+
+\subsection{Flat Field Correction}
+
+Finally there's the flat fields, we have six flat fields for our $H\alpha$ filter and five for the r filter. In order to correct for our flats we will have to take it one filter at a time, through their different headers and their respective labeling. First we will look at $H\alpha$ flat field files. After grouping them together (and trimming them) we can use the package within ccdproc 'ImageFileCollection' which will basically glob all our flat field files together. Next we want to use 'ccdproc.ImageFileCollection.filter' to glob just the $H\alpha$ filter flats. Next we will use the 'combine' package within ccdproc again, just like for the biases, the only diference is now the 'scale' is going to be defined. We need to normalize our flats before combining them since they are taken over a range of exposure times which leads to different flat field images, so the 'scale' within ccdproc.combine will be inverse median, which I defined using numpy. This allows us to make a master flat with normalized flat fields. To now correct for our new $H\alpha$ master flat field we will use the command within ccdproc, 'flat correct', and all we need to give it is our list of object images in the $H\alpha$ filter along with our master flat. Then repeat the process except for with the r-band flat fields and r-band object images.
+
+\begin{figure}[htb!]
+\plottwo{./images/flat1.png}{./images/flat2.png}
+\caption{Two master flats, r filter on left, $H\alpha$ filter on right, notice difference in source. \label{fig:f2}\label{fig:f4}}
+\end{figure}
+
+\subsection{Sky Subtraction}
+
+The last type of correction that needs to be made is the only one that doesn't have to do with electronics corrections. Sky subtraction is quite literally removing the background sky from the image (or just where you care about, so in this case M82). To do this we use the photutils package and we'll put up a elliptical aperture around M82 to get a 'galaxy region' covering the diffuse object just how we want, as well as another circular aperture away from M82, up in the corner of the image which will be used as the 'sky region'. See figure 3.  Next simply take the median of 'sky region' using sigma clipped stats within the astropy package and multiply it by the area of the 'M82 region', using 'photutils.area' to do the work for you. Next you do the actual subtraction, no packages necessary, 'aperture sum' - 'sky background', for each of the files, and assign them all to new variables, and we have our newly sky subtracted M82 region data.
+
+\begin{figure}
+\centering
+\includegraphics[width=1.0\textwidth]{images/aperture.png}
+\caption{\label{fig:frog}M82 Image with two Apertures for Photometry}
+\end{figure}
+
+\subsection{Determining $H\alpha$ Flux}
+
+The goal is that after this whole reduction process we will be able to do the following:
+
+    . Determine the average ADU from M82 through the $H\alpha$ filter compared to their exposure times, for our 4 $H\alpha$ object images
+    
+    . Account for quantum efficiency and errors
+    
+    . Convert from ADU over area to electrons over area
+    
+    . If we have electrons over area, and we know those electrons came from very specific wavelength photons, then we can determine the energy crossing our sensor's area per unit time
+    
+    . Energy per time per area is the definition of a radiant energy flux
+    
+    . Using the flux-luminosity equation stated earlier, and citing some known values of M82, we can plug in to find a luminosity from M82, at the discrete $H\alpha$ wavelength
+
+Picking up at sky subtraction, next we have to divide each M82 region (elliptical aperture) data by it's own exposure time to get an average. Assign that average value to a variable. Iterate with a for loop, for convenience, to get all 11 object files correctly sky-subtracted, and make an array with all your $H\alpha$ average photometry values, who are normalized with respect to their exposure time, and use numpy to get an average of those. Following these exact steps I landed on an average ADU/sec from M82 in $H\alpha$ of ~610830.436 ADU per second. 
+
+According to the Apache Point Observatory, near the wavelength of $H\alpha$, 656.28 nm, the quantum efficiency is ~0.90. So to, roughly, account for this we can multiply our ADU/sec average value by 10/9, to account for the photons that hit our detector about 1/10 times and didn't yield a response from the CCDs. Now let's multiply 10/9 with 610830.436 ADU per second to get our new photometry which has quantum efficiency accounted for. We get a new photometry of ~678700 ADU per second. 
+
+Citing the users manual for arctic 3.5 m camera, we see that the gain is ~2 electrons per ADU. So we want to turn our adu/sec to electron/sec, so we just double the ADU count from before. We now have 1357400 electrons/sec. We know that every photon that we detected in this situation was an $H\alpha$ photon, with wavelength 656.28 nm. This means we can determine the energy that went through our sensors per second, using the following two relations for photon frequency and photon energy:
+
+\begin{equation}\label{'Equation 1'}
+f = \frac{c}{\lambda}
+\end{equation} where f = frequency, c = speed of light, $\lambda$ = photon wavelength
+
+\begin{equation}\label{'Equation 1'}
+E = h f
+\end{equation} where E = photon energy, h = Plank constant, f = photon frequency \citep{2001JRASC..95...32L}
+
+Plugging in our wavelength of 656.28 and then our subsequent frequency yields a photon energy of 0.3007 eV, meaning that during the observing period there was about 0.3 eV passing over our sensor's area per second per photon. Now just multiply by our number of photons, n = 678700, and divide by area of the telescope aperture and seconds to get flux:
+
+\begin{equation}
+Flux(\alpha) = (0.3007 eV * 678700 photons)((\frac{3.5m}{2} \sqrt{2})^2 * seconds^{-1})
+\end{equation}, where we multiply by $\sqrt{2}$ because our telescope's aperture is a circle while the image is a square image. Fitting a square inside a circle means the diameter of the circle is the diagonal on the square. Through Pythagoras we can determine the side length and therefore area of the square by simply multiplying the diameter, 3.5 m, by \sqrt{2}.
+
+Now we can refer to equation 2 for turning that flux into a luminosity, found in Analysis
+
+\subsection{Error Discussion}
+
+Ideally we wouldn't have r filter data in conjunction with our $H\alpha$ data, rather we would have infrared filter data which we could use to account for dust extinction. There is just too much dust between us and M82, all of which is very small, ~a few microns across . The dust is so small that the longer wavelengths of the infrared regime are longer than the dust particles themselves, making it impossible for those photons to bounce off the dust. Any photon with a higher energy than an infrared photon (meaning shorter wavelength) is short enough that it will scatter (bounce) off dust particles, meaning there's tons of $H\alpha$ photons who were redirected on what would have been their ~12 million light year journey towards our sensors. The issue is not that $H\alpha$ experiences dust extinction, rather it is the fact that $H\alpha$ lies within the r regime itself, meaning both the discrete $H\alpha$ photons and r regime photons will experience roughly the same extinction, meaning we can't just use a ratio of $H\alpha$ to r and get a rough idea of dust extinction between the two, like we could if we had infrared data instead of r. Point being, I expect my avg value for ADU/sec for $H\alpha$ of ~610830.436 to possibly be too low, leading to a lower star formation rate.
+
+\bigskip
+\section{Analysis}
+Plugging into Equation 2:
+
+\begin{equation}
+L(\alpha) = (1.872 * 10^{30} Joules) 4\pi (11.42 Mly)^2
+\end{equation}
+\begin{equation}
+L(\alpha) = 2.2147048^{40} \frac{ergs}{second}
+\end{equation}
+
+There are plenty of sources which use a method of determining star formation rate, mentioned before, given an $H\alpha$ Luminosity. The method from Kennicutt is shown here\citep{1994ApJ...435...22K}:
+
+\begin{equation}\label{'Equation 7'}
+SFR(M_{\odot} * yr^{-1}) = 7.9 * 10^{-42} \frac{L(\alpha)}{ergs s^-{1}}, 
+
+where L(\alpha) = 2.2147048^{40} \frac{ergs}{second} \end{equation} 
+
+Plug in: We get a star formation rate of \begin{equation} 0.175 \frac{M_{\odot}}{year} \end{equation} which means one star is born every ~6 years. Considering that this time frame is longer than the actual age of M82, this implies either M82 has drastically slowed down it's star formation or we have an answer that is too low. I expect the dust extinction mentioned before is to blame. In an attempt to account for the dust extinction we will try and calibrate our M82 images using the nearby stars and their known brightnesses. Figure 5 shows the stars that I will try and calibrate with. There is also a table showing their respective absolute magnitudes (from a catalog) as well as our measured, instrumental magnitudes, and the difference between the two magnitudes.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/h.png}
+\caption{\label{fig:frog}Calibration Stars for M82}
+\end{figure}
+
+\begin{table}
+\caption{Calibration Stars}
+\begin{tabular}{llrrl}
+\toprule
+
+Star & Measured Magnitude & Known Magnitude & Offset \\
+\midrule
+ 1 &   -21.99 &  16.173 & 38.16\\
+ 2 &   -20.77 &  15.766 & 36.54\\
+ 3 &   -21.66 &  15.894 & 37.55\\
+ 4 &   -21.06 &  16.113 & 37.17\\
+ 5 &   -20.89 &  16.232 & 37.00\\
+ 6 &   -20.69 &  16.232 & 36.89\\
+ \bottomrule
+ Offset Avg & 37.28 & Std. & 0.55\\
+\end{tabular}
+\end{table}
+
+So now we simply compare our aperture photometry results from our r band data to the known values for brightness of the same stars. Looking at the first circular aperture we get a photometry sum of about 2069394, then divide by exposure time of 180 s for average count per second. When we do that we get ~11497 photons per sec. According to VizieR the apparent magnitude of this star, in specifically the r band, is 16 magnitudes. \citep{2016yCat.5147....0A}. Now we can use the relationship between apparent magnitude and absolute magnitude to determine it's absolute magnitude in the r band:
+
+\begin{equation}
+m - M = 5 \log\frac{d}{10}
+\end{equation} where m = apparent magnitude, M = absolute magnitude, and d = distance in parsecs. Plugging in values we get that the absolute magnitude for this star is 1.258. Now we can use the empirical relation between absolute magnitude and luminosity, given a standard luminosity of a nearby star, Vega.
+
+\begin{equation}
+M = -2.5 \log \frac{L_*}{L_s}
+\end{equation} where M = absolute magnitude, $L_*$ = Luminosity of star in question, $L_s$ = Standard Luminosity (Vega Luminosity). Plugging in for this equation, and solving for $L_*$, we find $L_* = 4.897 *10^{27} \frac{Joules}{second}$. 
+
+Now we have to calculate how many photons we would expect to see from this star per second per area. Here again is equation 2, rearranged, with values inserted:
+\begin{equation}
+flux = \frac{4.897*10^{27} \frac{Joules}{second}}{4\pi * (11.42 Mly)^{2}} = 3606 \frac{Joules}{m^2s}
+\end{equation}
+Next we simply divide that energy by the energy per photon for the r band. Since it is a range of wavelengths we must approximate what the average energy is per photon. According to the users manual the r band is centered near 623.1 nm so we will use that as the effective wavelength. Now using, equations 4 and 5 again, eventually gets us to:
+
+\begin{equation}
+n = 3606 Joules * (\frac{h c}{623.1 nm})^{-1} = 1.1311 * 10^{22} photons
+\end{equation} where n = number of photons, h = Plank's constant, c = speed of light.
+
+Now we have an average count per second for this star, as well as a luminosity, along with an average count per second for all of our $H\alpha$ images averaged out, and all we are missing is that $H\alpha$ luminosity, meaning we have a known ratio of counts per second to luminosity, so we need only apply it to our counts from before:
+
+\begin{equation}
+H\alpha_(theoretical)= (610830 photons) * \frac{1.1311 * 10^{22} photons}{11497 photons} = 6.01 * 10^{22} photons
+\end{equation}
+Now we work backwards to solve for a theoretical $H\alpha$ flux and subsequent luminosity, again using equation 2:
+
+\begin{equation}
+flux = \frac{6.01 * 10^{22} photons * 0.3007 \frac{eV}{photons}}{second * (\sqrt(2)*1.75 m)^{2}} = 472.08 \frac{Joules}{m^2s}
+\end{equation}
+Now we have a theoretical flux for both r (which is based on true results) and $H\alpha$ (which is an extrapolation),
+
+\begin{equation}
+\frac{4.897 * 10^{27}\frac{Joules}{second}} {11497} = \frac{L_*}{610830.4}
+\end{equation} we find $L_* = 2.6 * 10^{36}$ Joules which is a lower luminosity than I found before, without using comparison techniques. This implies that using Kennicutt's method again will lead to a smaller star formation rate than the $0.175 \frac{M_{\odot}}{year}$ I found earlier, and considering that was already too small we know that this value is off. This would lead to a star formation rate of $2.05 * 10^{-5} \frac{M_{\odot}}{year}$, implying a star is born approximately once every 50,000 years, which is far too slow for M82, especially when you consider the previous research done on M82. It appears our first attempt was more successful than the latter, since our value of $0.175 \frac{M_{\odot}}{year}$ is actually reasonably close to what other literature says for a star formation rate of M82.
+
+According to Kennicutt, 2008, the star formation rate is near $1 \frac{M_{\odot}}{year}$ \citep{2008ApJS..178..247K}, based on the data tables provided, his paper didn't explicitly state the star formation rate, rather just the $H\alpha$ luminosity, but the computation is trivial. Another paper states that the star formation rate for M82 is closer to $10 \frac{M_{\odot}}{year}$ \citep{2001A&G....42d..12D}, which is definitely higher than mine or what Kennicutt ascertained, however it is only about 1 magnitude greater than Kennicutt's.
+
+There were many issues that likely hampered our ability to make good calculations. Like mentioned before, the dust between M82 and us can lead to some very bad results, usually an underestimate of flux, unless you also have data in the right wavelength region such that it's wavelength is longer than the dust. The fact that the r filter regime of wavelengths includes the exact wavelength $H\alpha$ means that there is likely some light that got counted as $H\alpha$, yet did not come from a O or B type stars from a star forming region. Other issues include the fact that the r data had some weird inconsistencies regarding their relative counts and exposure times, so I only used the r data which didn't seem wrong. The fact that I inserted my intuition over the data may have itself been an error, too. There is also the sky which interferes with all earth-based observing, especially when you have limited data like we did and can't just go observe again, or at a different time of day or year or different exposure time. All of this culminates to the point where I don't believe our analysis was accurate in the end, even if my first star formation rate was pretty close.
+
+While the star formation rate may be off slightly, what is for sure is that we did do our data reduction procedures correctly, leading to very nice looking images. The comparison of a raw image of M82 to a completely calibrated image is pretty obvious, and the next two images, Figure 6, shows just that. Clearly the first image is not helpful to us, there is so much electronic noise that the whole disk and bulge of the galaxy blur together, where the active galactic nuclei blends in way out into the disk. You can see the overscan regions on the right of the raw image, the dark strips. These are both 300 second exposures, in the $H\alpha$ filter, and have the same scaling and color map, meaning they have the same initial parameters, yet one image looks like a blur while the other doesn't blur, even when you zoom in.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{./images/h_alpha.png}
+\caption{\label{fig:frog}Calibrated Science Image of M82 ($H\alpha$)}
+\end{figure}
+
+
+%\begin{figure}[htb!]
+%\plottwo{./images/h_alpha_u.png}{./images/h_alpha.png}
+%\caption{$H\alpha$ filter images, 300 s, raw image on left, calibrated on right \label{fig:f2}\label{fig:f4}}
+%\end{figure}
+
+
+\section{Summary}
+We started out by wishing to figure out the star formation rate of M82, given that we have data in an $H\alpha$ filter as well as r band filter. We went in expecting to use Kennicutt's method of determining star formation rate, given an $H\alpha$ luminosity, so we set out to determine said $H\alpha$ luminosity. Kennicutt's method is only accurate due to the very close relation between star formation rate, O and B stars and their rare Ultraviolet flux, HII and $H_2$ regions, $H\alpha$ emissions, and quantized conservation of energy in a Hydrogen atom. First we had to reduce our data, which was simple yet can take a long time. First you must combine your flats and biases respectively, and then use software packages to do the reduction and subtraction for you, followed by trimming off the overscan regions on the edges. Then we took the counts found within a circular aperture in the background (sky background) and subtracted it from the elliptical aperture around the galaxy, using more software packages. Then we converted that to electrons using the gain supplied in the users manual, and divided each image by it's exposure time giving us photons crossing over our telescopes aperture per second, which is a radiant flux. That flux was then converted to a $H\alpha$ luminosity just like planned. In an attempt to better my answer I did some additional work with the r data, trying to get a ratio of brightnesses of a known object in r vs M82 in $H\alpha$, then you would be able to have a rough estimate of $H\alpha$ luminosity of M82, but that method completely failed and gave a luminosity about 4 orders of magnitude less than what we got before. So, assuming we are correct: In M82, about every 6 Earth years, A Star is Born.
+
+
+\bibliographystyle{aasjournal}
+\bibliography{MyRefs}
+
+\end{document}
